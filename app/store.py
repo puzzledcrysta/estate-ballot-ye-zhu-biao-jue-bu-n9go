@@ -13,6 +13,11 @@ CREATE TABLE IF NOT EXISTS reviews (
   decision TEXT NOT NULL, note TEXT NOT NULL, changed TEXT NOT NULL,
   PRIMARY KEY(run_id,version)
 );
+CREATE TABLE IF NOT EXISTS public_versions (
+  run_id TEXT NOT NULL REFERENCES runs(id), review_version INTEGER NOT NULL,
+  payload TEXT NOT NULL, created TEXT NOT NULL,
+  PRIMARY KEY(run_id,review_version)
+);
 """
 
 

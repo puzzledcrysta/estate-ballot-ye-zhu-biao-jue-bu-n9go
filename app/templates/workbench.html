@@ -18,7 +18,7 @@
       <small>住宅小区业委会计票员</small>
     </aside>
     <div class="desk">
-      <header class="toolbar"><span>表决议案</span><span class="edition">规则 1.0</span><a class="btn" id="export" hidden>导出证据</a></header>
+      <header class="toolbar"><span>表决议案</span><span class="edition">规则 1.0</span><a class="btn" id="export" hidden>导出内部证据</a></header>
       <main>
         <section class="mast"><div><small class="department">公示复核</small><h1>业主表决簿</h1></div><time id="created" class="clock"></time></section>
         <section class="kpis" aria-label="批次指标"><div class="kpi"><small>有效</small><strong data-count="accepted">—</strong><span>条</span></div>
@@ -52,6 +52,8 @@
         <label>复核意见 <textarea id="review-note" maxlength="500" rows="2"></textarea></label>
         <div class="actions"><label>结论 <select id="decision"><option>确认</option><option>退回</option></select></label>
         <button class="btn btn--primary" type="submit">提交复核</button></div>
+        <div class="actions"><button class="btn" id="publish" type="button">发布公开版</button>
+        <a class="btn" id="public-link" hidden>下载公开版</a><output id="public-state"></output></div>
       </form>
     </section>
 

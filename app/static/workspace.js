@@ -164,12 +164,24 @@ async function render() {
       }]];
       rows = runs;
     } else {
-      const timeline = await query(`/api/review/${id}`);
+      const [timeline, publicState] = await Promise.all([
+        query(`/api/review/${id}`), query(`/api/review/${id}/public`),
+      ]);
       view = [['版本','version','num'], ['结论','decision'], ['复核意见','note'], ['登记 UTC','changed']];
       rows = timeline;
       if (ticket === renderEpoch) {
         reviewVersion = timeline[0]?.version || 0;
         byId('review').hidden = false;
+        const link = byId('public-link');
+        const available = publicState.state === 'available';
+        link.hidden = !available;
+        if (available) {
+          link.href = `/api/export/${id}/public`;
+          link.textContent = `下载公开版 v${publicState.review_version}`;
+        }
+        byId('public-state').textContent = available
+          ? `发布于 ${publicState.published.slice(0, 19).replace('T', ' ')} UTC`
+          : publicState.detail;
       }
     }
     if (ticket === renderEpoch) {
@@ -255,5 +267,14 @@ byId('review').addEventListener('submit', async event => {
     notice(error.message, true);
     if (error.status === 409) await render();
   }
+});
+byId('publish').addEventListener('click', async () => {
+  if (!result) return;
+  const id = result.manifest.run_id;
+  try {
+    const outcome = await query(`/api/review/${id}/publish`, {});
+    notice(outcome.fresh ? `公开版 v${outcome.review_version} 已发布` : '同一结论已发布，未新增公开版本');
+    await render();
+  } catch (error) { notice(error.message, true); }
 });
 render();
